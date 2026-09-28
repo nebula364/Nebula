@@ -7,10 +7,13 @@
   </head>
   <body>
     <a-scene>
+      <a-assets>
+  <img id="moje-zdjecie" src="foto.png">
+</a-assets>
       <a-entity id="rain" particle-system="preset: rain; color: #24CAFF; particleCount: 5000"></a-entity>
 
       <a-entity id="sphere" geometry="primitive: sphere"
-                material="color: #EFEFEF; shader: flat"
+                material="src: #moje-zdjecie; shader: flat"
                 position="0 0.15 -5"
                 light="type: point; intensity: 15.7"
                 animation="property: position; easing: easeInOutQuad; dir: alternate; dur: 1000; to: 0 -0.10 -5; loop: true"></a-entity>
