@@ -11,10 +11,17 @@
     <style>
         body { margin: 0; overflow: hidden; }
           #video-0, #video-3, #video-5 { display: none; }
+             /* Ekran powitalny wymuszający kliknięcie (odblokowanie wideo na telefonach) */
+        #splash {
+            position: fixed; top: 0; left: 0; width: 100vw;height: 100vh;
+            background: black; color: white; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            font-family: sans-serif; font-size: large; text-align: center; cursor: pointer; }
     </style>
 
 </head>
-
+  <!-- Ekran startowy: Kliknięcie tutaj odblokuje odtwarzanie filmów -->
+    <div id="splash">Dotknij ekranu, aby uruchomić AR</div>
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
         
         <a-assets>
@@ -43,26 +50,44 @@
 
     </a-scene>
 
-    <script>
-        // Automatyczna obsługa włączania i wyłączania filmów dla wielu markerów
-        const setupMarkerVideo = (markerId, videoId) => {
-            const marker = document.querySelector(markerId);
-            const video = document.querySelector(videoId);
+        <script>
+        // Obsługa ekranu startowego (bez użycia słowa const)
+        document.querySelector('#splash').addEventListener('click', function() {
+            document.querySelector('#splash').style.display = 'none';
+            document.querySelector('#video-0').play(); document.querySelector('#video-0').pause();
+            document.querySelector('#video-3').play(); document.querySelector('#video-3').pause();
+            document.querySelector('#video-5').play(); document.querySelector('#video-5').pause();
+        });
 
-            marker.addEventListener('markerFound', () => {
-                video.play().catch(err => console.log("Czekam na kliknięcie ekranu...", err));
-            });
+        // Obsługa MARKERA 0
+        document.querySelector('#marker-0').addEventListener('markerFound', function() {
+            document.querySelector('#video-0').muted = false;
+            document.querySelector('#video-0').play();
+        });
+        document.querySelector('#marker-0').addEventListener('markerLost', function() {
+            document.querySelector('#video-0').pause();
+        });
 
-            marker.addEventListener('markerLost', () => {
-                video.pause();
-            });
-        };
+        // Obsługa MARKERA 3
+        document.querySelector('#marker-3').addEventListener('markerFound', function() {
+            document.querySelector('#video-3').muted = false;
+            document.querySelector('#video-3').play();
+        });
+        document.querySelector('#marker-3').addEventListener('markerLost', function() {
+            document.querySelector('#video-3').pause();
+        });
 
-        // Podpinamy logikę pod wszystkie 3 stworki
-        setupMarkerVideo('#marker-0', '#video-0');
-        setupMarkerVideo('#marker-3', '#video-3');
-        setupMarkerVideo('#marker-5', '#video-5');
+        // Obsługa MARKERA 5
+        document.querySelector('#marker-5').addEventListener('markerFound', function() {
+            document.querySelector('#video-5').muted = false;
+            document.querySelector('#video-5').play();
+        });
+        document.querySelector('#marker-5').addEventListener('markerLost', function() {
+            document.querySelector('#video-5').pause();
+        });
     </script>
+
+
 
 </body>
 </html>
